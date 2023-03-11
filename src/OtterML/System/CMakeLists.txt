@@ -4,7 +4,6 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/OtterML/System)
 set(SRC
 	${SRCROOT}/Vector2.cpp
 	${INCROOT}/Vector2.hpp
-	${INCROOT}/Vector2.inl
 )
 source_group("" FILES ${SRC})
 
