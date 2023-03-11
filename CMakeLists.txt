@@ -18,7 +18,9 @@ if(NOT CMAKE_OSX_SYSROOT)
                     ERROR_QUIET)
 endif()
 
-project("OtterML" VERSION 0.1.0)
+project("OtterML" VERSION 0.1.0 LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CSS_STANDARD_REQUIRED true)
 
 set(VERSION_IS_RELEASE OFF)
 
@@ -37,6 +39,7 @@ else()
 endif()
 
 # module options here
+otterml_set_option(OTTERML_BUILD_GRAPHICS TRUE BOOL "TRUE to build OtterML's Graphics module.")
 
 if(OTTERML_OS_WINDOWS OR OTTERML_OS_IOS)
     set(DEFAULT_INSTALL_MISC_DIR .)
@@ -51,13 +54,7 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
 
 add_subdirectory(src/OtterML)
 
-file(GLOB OTTERML_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/OtterML/*")
-
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp
-                   COMMAND touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp
-                   VERBATIM)
-
-set(OTTERML_SOURCES ${OTTERML_HEADERS})
-list(APPEND OTTERML_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
-
-add_library(OtterML ${OTTERML_SOURCES})
+install(DIRECTORY include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        COMPONENT devel
+        FILES_MATCHING PATTERN "*.hpp" PATTERN "*.inl")
