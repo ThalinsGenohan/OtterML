@@ -9,4 +9,6 @@ source_group("" FILES ${SRC})
 
 otterml_add_library(Graphics SOURCES ${SRC})
 
+target_link_libraries(otterml-graphics PUBLIC OtterML::System)
+
 #todo

@@ -4,9 +4,16 @@
 
 namespace oter
 {
-template <typename T> float Vector2<T>::GetLength()
+template <typename T>
+constexpr float Vector2<T>::GetLength()
 {
 	return std::sqrt(this->X * this->X + this->Y * this->Y);
+}
+
+template <typename T>
+constexpr float Vector2<T>::GetLengthSquared()
+{
+	return this->X * this->X + this->Y * this->Y;
 }
 
 template <typename T>
