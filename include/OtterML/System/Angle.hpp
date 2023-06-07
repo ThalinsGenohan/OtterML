@@ -58,6 +58,8 @@ private:
 	bool _changed = false;
 };
 
+constexpr Angle::Angle(float degrees) : _degrees(degrees) { }
+
 [[nodiscard]] constexpr float Angle::GetDegrees() const { return this->_degrees; }
 [[nodiscard]] constexpr float Angle::GetRadians() const	{ return this->_radians; }
 

@@ -1,12 +1,13 @@
 #include <OtterML/System/Angle.hpp>
 
+#include <cmath>
+
 namespace oter
 {
 
 const Angle Angle::Zero(0.f);
 
 constexpr Angle::Angle() : _degrees(0.f) { }
-constexpr Angle::Angle(float degrees) : _degrees(degrees) { }
 
 void Angle::SetDegrees(float degrees)
 {

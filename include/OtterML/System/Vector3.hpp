@@ -83,7 +83,7 @@ public:
 	 * \brief Convert to a glm::ivec3
 	 */
 	explicit operator glm::ivec3() const;
-	
+
 	/**
 	 * \brief Convert to a 3x1 oter::Matrix
 	 */
@@ -126,10 +126,22 @@ public:
 
 	// Friend operators
 	// Binary scalar operators
-	friend Vector3 operator+(Vector3 left, const T& right);
-	friend Vector3 operator-(Vector3 left, const T& right);
-	friend Vector3 operator*(Vector3 left, const T& right);
-	friend Vector3 operator/(Vector3 left, const T& right);
+	friend Vector3 operator+(Vector3 left, const T& right)
+	{
+		throw;
+	}
+	friend Vector3 operator-(Vector3 left, const T& right)
+	{
+		throw;
+	}
+	friend Vector3 operator*(Vector3 left, const T& right)
+	{
+		throw;
+	}
+	friend Vector3 operator/(Vector3 left, const T& right)
+	{
+		throw;
+	}
 
 	// Binary vector operators
 	template <typename U>

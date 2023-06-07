@@ -36,7 +36,7 @@ public:
 	void SetValue(unsigned row, unsigned column, T data);
 
 	[[nodiscard]] Matrix GetInverse() const;
-	
+
 	/**
 	 * \brief Convert to a glm::mat.
 	 */
@@ -57,12 +57,12 @@ public:
 	 * \brief Convert to a glm::mat2.
 	 */
 	//[[nodiscard]] explicit operator glm::mat2() const;
-	
+
 	/**
 	 * \brief Convert to a glm::mat3.
 	 */
 	//[[nodiscard]] explicit operator glm::mat3() const;
-	
+
 	/**
 	 * \brief Convert to a glm::mat4.
 	 */
@@ -93,21 +93,54 @@ public:
 
 	// Friend operators
 	// Binary scalar operators
-	friend Matrix operator+(const Matrix& left, const T& right);
-	friend Matrix operator-(const Matrix& left, const T& right);
-	friend Matrix operator*(const Matrix& left, const T& right);
-	friend Matrix operator/(const Matrix& left, const T& right);
+	friend Matrix operator+(const Matrix& left, const T& right)
+	{
+		throw;
+	}
+	friend Matrix operator-(const Matrix& left, const T& right)
+	{
+		throw;
+	}
+	friend Matrix operator*(const Matrix& left, const T& right)
+	{
+		throw;
+	}
+	friend Matrix operator/(const Matrix& left, const T& right)
+	{
+		throw;
+	}
 
 	// Binary vector operators
-	friend Matrix operator*(const Matrix& left, const Vector2<T>& right);
-	friend Matrix operator*(const Matrix& left, const Vector3<T>& right);
-	friend Matrix operator*(const Matrix& left, const Vector4<T>& right);
+	friend Matrix operator*(const Matrix& left, const Vector2<T>& right)
+	{
+		throw;
+	}
+	friend Matrix operator*(const Matrix& left, const Vector3<T>& right)
+	{
+		throw;
+	}
+	friend Matrix operator*(const Matrix& left, const Vector4<T>& right)
+	{
+		throw;
+	}
 
 	// Binary matrix operators
-	friend Matrix operator+(const Matrix& left, const Matrix& right);
-	friend Matrix operator-(const Matrix& left, const Matrix& right);
-	friend Matrix operator*(const Matrix& left, const Matrix& right);
-	friend Matrix operator/(const Matrix& left, const Matrix& right);
+	friend Matrix operator+(const Matrix& left, const Matrix& right)
+	{
+		throw;
+	}
+	friend Matrix operator-(const Matrix& left, const Matrix& right)
+	{
+		throw;
+	}
+	friend Matrix operator*(const Matrix& left, const Matrix& right)
+	{
+		throw;
+	}
+	friend Matrix operator/(const Matrix& left, const Matrix& right)
+	{
+		throw;
+	}
 
 	// Static declarations
 	static const Matrix Zero;
@@ -142,35 +175,35 @@ private:
 				i++;
 			}
 	}
-	
+
 	// Recursive function for finding determinant of matrix
 	// n is current dimension of A[][].
 	static T GetDeterminant(std::array<std::array<T, Tx>, Ty> A, int n)
 	{
 		T D = 0; // Initialize result
- 
+
 		//  Base case : if matrix contains single element
 		if (n == 1)
 			return A[0][0];
- 
+
 		std::array<std::array<T, Tx>, Ty> temp; // To store cofactors
- 
+
 		int sign = 1; // To store sign multiplier
- 
+
 		// Iterate for each element of first row
 		for (int f = 0; f < n; f++)
 		{
 			// Getting Cofactor of A[0][f]
 			GetCofactor(A, temp, 0, f, n);
 			D += sign * A[0][f] * GetDeterminant(temp, n - 1);
-	 
+
 			// terms are to be added with alternate sign
 			sign = -sign;
 		}
-	 
+
 		return D;
 	}
-	
+
 	// Function to get adjoint of A[N][N] in adj[N][N].
 	std::array<std::array<T, Tx>, Ty> GetAdjoint() const
 	{
@@ -180,21 +213,21 @@ private:
 			adj[0][0] = 1;
 			return adj;
 		}
-	 
+
 		// temp is used to store cofactors of A[][]
 		int sign = 1;
 		std::array<std::array<T, Tx>, Ty> temp;
-	 
+
 		for (int i = 0; i < Ty; i++)
 		{
 			for (int j = 0; j < Tx; j++) {
 				// Get cofactor of A[i][j]
 				GetCofactor(this->_data, temp, i, j, Tx);
-	 
+
 				// sign of adj[j][i] positive if sum of row
 				// and column indexes is even.
 				sign = ((i + j) % 2 == 0) ? 1 : -1;
-	 
+
 				// Interchanging rows and columns to get the
 				// transpose of the cofactor matrix
 				adj[j][i] = (sign) * (GetDeterminant(temp, Tx - 1));
@@ -218,7 +251,7 @@ Matrix<T, Tx, Ty>::Matrix(bool identity) : Matrix(static_cast<T>(0))
 		spdlog::error("Cannot create identity matrix for non-square matrix");
 		return;
 	}
-	
+
 	for (unsigned i = 0; i < Tx; i++)
 	{
 		this->_data[i][i] = static_cast<T>(1);
@@ -305,7 +338,7 @@ Matrix<T, Tx, Ty> Matrix<T, Tx, Ty>::GetInverse() const
 
 	// Find determinant of A[][]
 	T det = GetDeterminant(this->_data, Tx);
-	if (det == 0) 
+	if (det == 0)
 		return Matrix::Zero;
 
 	// Find adjoint

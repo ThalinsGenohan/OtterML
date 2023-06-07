@@ -64,7 +64,7 @@ public:
 	explicit operator uint32_t() const;
 
 private:
-	uint32_t _id = NULL;
+	uint32_t _id = 0;
 
 	static void CheckCompileErrors(uint32_t object, const char* type);
 };
