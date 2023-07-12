@@ -4,6 +4,8 @@
 #include <glm/vec2.hpp>
 #include <yaml-cpp/yaml.h>
 
+#include <OtterML/Common.hpp>
+
 namespace oter
 {
 template <typename T, unsigned Tx, unsigned Ty>
@@ -17,69 +19,106 @@ public:
 	T Y = static_cast<T>(0);
 
 	/**
-	 * \brief Default constructor
-	 *
-	 * Creates a Vector2(0, 0)
+	 * @brief Construct a new default Vector2
 	 */
 	Vector2();
 
 	/**
-	 * \brief Construct a Vector2 from coordinates
-	 * \param x X coordinate
-	 * \param y Y coordinate
+	 * @brief Construct a new Vector2 from coordinates
+	 * @param x X coordinate
+	 * @param y Y coordinate
 	 */
 	Vector2(T x, T y);
 
 	/**
-	 * \brief Construct a Vector2 from a scalar value
-	 * \param scalar Scalar value for both coordinates
+	 * @brief Construct a new Vector2 from a scalar value
+	 * @param scalar Scalar value for both coordinates
 	 */
 	explicit Vector2(T scalar);
 
 	/**
-	 * \brief Construct a Vector2 from a different Vector2
+	 * @brief Construct a new Vector2 from a different Vector2
 	 *
 	 * Does not replace copy constructor
-	 * \param other Vector to convert
+	 * @param other Vector to convert
 	 */
 	template <typename U>
 	explicit Vector2(const Vector2<U>& other);
 
 	/**
-	* /brief Copy constructor
-	*/
+	 * @brief Copy constructor
+	 */
 	Vector2(const Vector2& other);
 
 	/**
-	 * \brief Construct a Vector2 from a glm::vec<2, U>
-	 * \param glmVec glm::vec<2, U> to convert
+	 * @brief Construct a new Vector2 from a C-style array
+	 * @param array Array to convert
 	 */
-	template <typename U>
-	explicit Vector2(const glm::vec<2, U>& glmVec) : Vector2(static_cast<T>(glmVec.x), static_cast<T>(glmVec.y)) { }
+	explicit Vector2(T array[2]);
 
 	/**
-	 * \brief Convert to a glm::vec<2, U>
+	 * @brief Construct a new Vector2 from an std::array<T, 2>
+	 * @param array Array to convert
+	 */
+	explicit Vector2(std::array<T, 2> array);
+
+	/**
+	 * @brief Construct a new Vector2 from a 2x1 oter::Matrix
+	 *
+	 * @param matrix
+	 */
+	explicit Vector2(Matrix<T, 1, 2> matrix);
+
+	explicit Vector2(Matrix<T, 2, 1> matrix);
+
+	/**
+	 * @brief Construct a Vector2 from a glm::vec<2, U>
+	 * @param glmVec glm::vec<2, U> to convert
+	 */
+	template <typename U>
+	explicit Vector2(const glm::vec<2, U>& glmVec);
+
+	/**
+	 * @brief Convert to a std::array<
+	 */
+	explicit operator std::array<T, 2>() const;
+
+	/**
+	 * @brief Convert to a 2x1 oter::Matrix
+	 */
+	explicit operator Matrix<T, 1, 2>() const;
+
+	/**
+	 * @brief Convert to a glm::vec<2, U>
 	 */
 	template <typename U>
 	explicit operator glm::vec<2, U>() const
 	{
 		return glm::vec<2, U>(static_cast<U>(this->X), static_cast<U>(this->Y));
 	}
-	
-	/**
-	 * \brief Convert to a 2x1 oter::Matrix
-	 */
-	explicit operator Matrix<T, 1, 2>() const;
+
+	[[nodiscard]] T operator[](size_t index) const
+	{
+		switch (index)
+		{
+		case 0:
+			return this->X;
+		case 1:
+			return this->Y;
+		default:
+			throw std::out_of_range("Vector2 only contains 2 values.");
+		}
+	}
 
 	/**
-	 * \brief Compares two Vector2s
-	 * \param right Vector2 to compare to
-	 * \return True if Vector2s are equal
+	 * @brief Compares two Vector2s
+	 * @param right Vector2 to compare to
+	 * @return True if Vector2s are equal
 	 */
 	[[nodiscard]] constexpr bool operator==(const Vector2& right) const;
 
-	[[nodiscard]] constexpr float GetLength();
-	[[nodiscard]] constexpr float GetLengthSquared();
+	[[nodiscard]] constexpr f32 GetLength();
+	[[nodiscard]] constexpr f32 GetLengthSquared();
 
 	[[nodiscard]] Vector2 GetNormalized();
 
@@ -161,123 +200,6 @@ public:
 	static const Vector2 UnitY;
 };
 }
-
-template <typename T>
-oter::Vector2<T>::Vector2() : Vector2(static_cast<T>(0)) {}
-
-template <typename T>
-oter::Vector2<T>::Vector2(T x, T y) : X(x), Y(y) {}
-
-template <typename T>
-oter::Vector2<T>::Vector2(T scalar) : X(scalar), Y(scalar) {}
-
-template <typename T>
-template <typename U>
-oter::Vector2<T>::Vector2(const oter::Vector2<U>& other) : X(static_cast<T>(other.X)), Y(static_cast<T>(other.Y)) {}
-
-template <typename T>
-oter::Vector2<T>::Vector2(const oter::Vector2<T>& other) : X(other.X), Y(other.Y) {}
-
-template <typename T>
-T oter::Vector2<T>::Dot(const oter::Vector2<T>& right)
-{
-	return this->X * right.X + this->Y * right.Y;
-}
-
-template <typename T>
-T oter::Vector2<T>::Cross(const oter::Vector2<T>& right)
-{
-	return this->X * right.X - this->Y * right.Y;
-}
-
-template <typename T>
-constexpr bool oter::Vector2<T>::operator==(const oter::Vector2<T>& right) const
-{
-	return this->X == right.X && this->Y == right.Y;
-}
-
-template <typename T>
-oter::Vector2<T> oter::Vector2<T>::operator-(const Vector2<T>& right)
-{
-	return Vector2<T>(-right.X, -right.Y);
-}
-
-template <typename T>
-oter::Vector2<T>& oter::Vector2<T>::operator+=(const T& right)
-{
-	this->X += right;
-	this->Y += right;
-	return *this;
-}
-
-template <typename T>
-oter::Vector2<T>& oter::Vector2<T>::operator-=(const T& right)
-{
-	this->X -= right;
-	this->Y -= right;
-	return *this;
-}
-
-template <typename T>
-oter::Vector2<T>& oter::Vector2<T>::operator*=(const T& right)
-{
-	this->X *= right;
-	this->Y *= right;
-	return *this;
-}
-
-template <typename T>
-oter::Vector2<T>& oter::Vector2<T>::operator/=(const T& right)
-{
-	this->X /= right;
-	this->Y /= right;
-	return *this;
-}
-
-// I have no idea why this has to have two separate template definitions instead of a comma
-template <typename T>
-template <typename U>
-oter::Vector2<T>& oter::Vector2<T>::operator+=(const oter::Vector2<U>& right)
-{
-	this->X += right.X;
-	this->Y += right.Y;
-	return *this;
-}
-
-template <typename T>
-template <typename U>
-oter::Vector2<T>& oter::Vector2<T>::operator-=(const oter::Vector2<U>& right)
-{
-	this->X -= right.X;
-	this->Y -= right.Y;
-	return *this;
-}
-
-template <typename T>
-template <typename U>
-oter::Vector2<T>& oter::Vector2<T>::operator*=(const oter::Vector2<U>& right)
-{
-	this->X *= right.X;
-	this->Y *= right.Y;
-	return *this;
-}
-
-template <typename T>
-template <typename U>
-oter::Vector2<T>& oter::Vector2<T>::operator/=(const oter::Vector2<U>& right)
-{
-	this->X /= right.X;
-	this->Y /= right.Y;
-	return *this;
-}
-
-// Static definitions
-template <typename T>
-const oter::Vector2<T> oter::Vector2<T>::Zero(static_cast<T>(0));
-template <typename T>
-const oter::Vector2<T> oter::Vector2<T>::UnitX(static_cast<T>(1), static_cast<T>(0));
-template <typename T>
-const oter::Vector2<T> oter::Vector2<T>::UnitY(static_cast<T>(0), static_cast<T>(1));
 
 template <typename T>
 struct YAML::convert<oter::Vector2<T>>

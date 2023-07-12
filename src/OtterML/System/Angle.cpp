@@ -1,7 +1,5 @@
 #include <OtterML/System/Angle.hpp>
 
-#include <cmath>
-
 namespace oter
 {
 
@@ -9,20 +7,15 @@ const Angle Angle::Zero(0.f);
 
 constexpr Angle::Angle() : _degrees(0.f) { }
 
-void Angle::SetDegrees(float degrees)
+void Angle::SetDegrees(f32 degrees)
 {
 	this->_degrees = degrees;
-	this->_radians = degrees * (PI / 180.0);
+	this->_radians = static_cast<f32>(degrees * (PI / 180.0));
 }
-void Angle::SetRadians(float radians)
+void Angle::SetRadians(f32 radians)
 {
 	this->_radians = radians;
-	this->_degrees = radians * (180.0 / PI);
-}
-
-[[nodiscard]] std::partial_ordering Angle::operator<=>(const Angle& right) const
-{
-	return this->_degrees <=> right._degrees;
+	this->_degrees = static_cast<f32>(radians * (180.0 / PI));
 }
 
 Angle& Angle::WrapSigned()
@@ -47,22 +40,22 @@ Angle& Angle::operator-=(const Angle& right)
 	return *this;
 }
 
-Angle& Angle::operator+=(const float& right)
+Angle& Angle::operator+=(const f32& right)
 {
 	this->SetDegrees(this->_degrees + right);
 	return *this;
 }
-Angle& Angle::operator-=(const float& right)
+Angle& Angle::operator-=(const f32& right)
 {
 	this->SetDegrees(this->_degrees - right);
 	return *this;
 }
-Angle& Angle::operator*=(const float& right)
+Angle& Angle::operator*=(const f32& right)
 {
 	this->SetDegrees(this->_degrees * right);
 	return *this;
 }
-Angle& Angle::operator/=(const float& right)
+Angle& Angle::operator/=(const f32& right)
 {
 	this->SetDegrees(this->_degrees / right);
 	return *this;
@@ -84,25 +77,30 @@ Angle operator-(Angle left, const Angle& right)
 	return left;
 }
 
-Angle operator+(Angle left, const float& right)
+Angle operator+(Angle left, const f32& right)
 {
 	left += right;
 	return left;
 }
-Angle operator-(Angle left, const float& right)
+Angle operator-(Angle left, const f32& right)
 {
 	left -= right;
 	return left;
 }
-Angle operator*(Angle left, const float& right)
+Angle operator*(Angle left, const f32& right)
 {
 	left *= right;
 	return left;
 }
-Angle operator/(Angle left, const float& right)
+Angle operator/(Angle left, const f32& right)
 {
 	left /= right;
 	return left;
+}
+
+Angle operator""_d(long double value)
+{
+	return Angle(static_cast<f32>(value));
 }
 
 }
