@@ -1,8 +1,7 @@
 #ifndef OTER_FIXEDPOINT_H
 #define OTER_FIXEDPOINT_H
 
-#include <compare>
-#include <cstdint>
+#include <OtterML/Common.hpp>
 
 namespace oter
 {
@@ -30,14 +29,14 @@ public:
 
 	FixedPoint(const FixedPoint& other) : Whole(other.Whole), Fraction(other.Fraction) { }
 
-	explicit operator float() const
+	explicit operator f32() const
 	{
-		return static_cast<float>(this->Whole) + static_cast<float>(this->Fraction) / static_cast<float>(this->FRACTION_MAX);
+		return static_cast<f32>(this->Whole) + static_cast<f32>(this->Fraction) / static_cast<f32>(this->FRACTION_MAX);
 	}
 
-	explicit operator double() const
+	explicit operator f64() const
 	{
-		return static_cast<double>(this->Whole) + static_cast<double>(this->Fraction) / static_cast<double>(this->FRACTION_MAX);
+		return static_cast<f64>(this->Whole) + static_cast<f64>(this->Fraction) / static_cast<f64>(this->FRACTION_MAX);
 	}
 
 	[[nodiscard]] constexpr Tw Floor() const;
@@ -73,7 +72,7 @@ public:
 			return FixedPoint(-right.Whole, right.Fraction);
 
 		const Tw negativeWhole = -right.Whole - 1;
-		const Tf negativeFraction = right.FRACTION_MAX + 1 - right.Fraction;
+		const Tf negativeFraction = static_cast<Tf>(right.FRACTION_MAX + 1 - right.Fraction);
 		return FixedPoint(negativeWhole, negativeFraction);
 	}
 
@@ -110,7 +109,7 @@ public:
 	}
 	FixedPoint& operator*=(const FixedPoint& right)
 	{
-		const uint64_t fractionProduct = this->Fraction * right.Whole + right.Fraction * this->Whole + (this->Fraction * right.Fraction / this->FRACTION_MAX);
+		const u64 fractionProduct = this->Fraction * right.Whole + right.Fraction * this->Whole + (this->Fraction * right.Fraction / this->FRACTION_MAX);
 		this->Whole *= right.Whole;
 		if (fractionProduct > this->FRACTION_MAX)
 			this->Whole += fractionProduct / this->FRACTION_MAX;
@@ -175,10 +174,10 @@ public:
 		if (r < 0)
 			r *= -1;
 
-		const uint64_t fractionProduct = this->Fraction * right;
+		const u64 fractionProduct = this->Fraction * right;
 		this->Whole *= right;
 		if (fractionProduct > this->FRACTION_MAX)
-			this->Whole += fractionProduct / this->FRACTION_MAX;
+			this->Whole += static_cast<Tw>(fractionProduct / this->FRACTION_MAX);
 		this->Fraction = static_cast<Tf>(fractionProduct);
 
 		if (right < 0)

@@ -1,12 +1,7 @@
 #ifndef OTER_VECTOR3_HPP
 #define OTER_VECTOR3_HPP
 
-//namespace glm
-//{
-//class vec3;
-//class ivec3;
-//class uvec3;
-//}
+#include <OtterML/Common.hpp>
 
 namespace oter
 {
@@ -96,8 +91,8 @@ public:
 	 */
 	[[nodiscard]] constexpr bool operator==(const Vector3& right) const;
 
-	[[nodiscard]] constexpr float GetLength();
-	[[nodiscard]] constexpr float GetLengthSquared();
+	[[nodiscard]] constexpr f32 GetLength();
+	[[nodiscard]] constexpr f32 GetLengthSquared();
 
 	[[nodiscard]] Vector3 GetNormalized();
 

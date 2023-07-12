@@ -1,20 +1,18 @@
 #ifndef OTER_MATRIX_HPP
 #define OTER_MATRIX_HPP
 
-#include <array>
-#include <glm/matrix.hpp>
+//#include <glm/matrix.hpp>
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/sinks/stdout_sinks.h>
 
+#include <OtterML/Common.hpp>
+
 namespace oter
 {
-template <typename T>
-struct Vector2;
-template <typename T>
-struct Vector3;
-template <typename T>
-struct Vector4;
+
+template <typename T, unsigned Ts>
+class Vector;
 
 template <typename T, unsigned Tx, unsigned Ty>
 class Matrix
@@ -28,12 +26,12 @@ public:
 	explicit Matrix(const glm::mat<Tx, Ty, T>& glmMat);
 
 	[[nodiscard]] const std::array<std::array<T, Tx>, Ty>& GetData() const;
-	[[nodiscard]] const std::array<T, Tx>& GetRow(unsigned row) const;
-	[[nodiscard]] T GetValue(unsigned row, unsigned column) const;
+	[[nodiscard]] const std::array<T, Tx>& GetRow(u32 row) const;
+	[[nodiscard]] T GetValue(u32 row, u32 column) const;
 
 	void SetData(const std::array<std::array<T, Tx>, Ty>& data);
-	void SetRow(unsigned row, const std::array<T, Tx>& data);
-	void SetValue(unsigned row, unsigned column, T data);
+	void SetRow(u32 row, const std::array<T, Tx>& data);
+	void SetValue(u32 row, u32 column, T data);
 
 	[[nodiscard]] Matrix GetInverse() const;
 
@@ -43,9 +41,9 @@ public:
 	[[nodiscard]] explicit operator glm::mat<Tx, Ty, T>() const
 	{
 		glm::mat<Tx, Ty, T> mat;
-		for (unsigned y = 0; y < Ty; y++)
+		for (u32 y = 0; y < Ty; y++)
 		{
-			for (unsigned x = 0; x < Tx; x++)
+			for (u32 x = 0; x < Tx; x++)
 			{
 				mat[y][x] = this->_data[y][x];
 			}
@@ -81,9 +79,7 @@ public:
 	Matrix& operator/=(const T& right);
 
 	// Binary vector operators
-	Matrix& operator*=(const Vector2<T>& right);
-	Matrix& operator*=(const Vector3<T>& right);
-	Matrix& operator*=(const Vector4<T>& right);
+	Matrix& operator*=(const Vector<T, Tx>& right);
 
 	// Binary matrix operators
 	Matrix& operator+=(const Matrix& right);
@@ -111,15 +107,7 @@ public:
 	}
 
 	// Binary vector operators
-	friend Matrix operator*(const Matrix& left, const Vector2<T>& right)
-	{
-		throw;
-	}
-	friend Matrix operator*(const Matrix& left, const Vector3<T>& right)
-	{
-		throw;
-	}
-	friend Matrix operator*(const Matrix& left, const Vector4<T>& right)
+	friend Matrix operator*(const Matrix& left, const Vector<T, Tx>& right)
 	{
 		throw;
 	}
@@ -150,14 +138,14 @@ private:
 
 	// Function to get cofactor of A[p][q] in temp[][]. n is
 	// current dimension of A[][]
-	static void GetCofactor(const std::array<std::array<T, Tx>, Ty>& A, std::array<std::array<T, Tx>, Ty>& temp, int p, int q, int n)
+	static void GetCofactor(const std::array<std::array<T, Tx>, Ty>& A, std::array<std::array<T, Tx>, Ty>& temp, i32 p, i32 q, i32 n)
 	{
-		int i = 0;
-		int j = 0;
+		i32 i = 0;
+		i32 j = 0;
 
 		// Looping for each element of the matrix
-		for (int row = 0; row < n; row++)
-			for (int col = 0; col < n; col++)
+		for (i32 row = 0; row < n; row++)
+			for (i32 col = 0; col < n; col++)
 			{
 				//  Copying into temporary matrix only those
 				//  element which are not in given row and
@@ -178,7 +166,7 @@ private:
 
 	// Recursive function for finding determinant of matrix
 	// n is current dimension of A[][].
-	static T GetDeterminant(std::array<std::array<T, Tx>, Ty> A, int n)
+	static T GetDeterminant(std::array<std::array<T, Tx>, Ty> A, i32 n)
 	{
 		T D = 0; // Initialize result
 
@@ -188,10 +176,10 @@ private:
 
 		std::array<std::array<T, Tx>, Ty> temp; // To store cofactors
 
-		int sign = 1; // To store sign multiplier
+		i32 sign = 1; // To store sign multiplier
 
 		// Iterate for each element of first row
-		for (int f = 0; f < n; f++)
+		for (i32 f = 0; f < n; f++)
 		{
 			// Getting Cofactor of A[0][f]
 			GetCofactor(A, temp, 0, f, n);
@@ -208,19 +196,19 @@ private:
 	std::array<std::array<T, Tx>, Ty> GetAdjoint() const
 	{
 		std::array<std::array<T, Tx>, Ty> adj;
-		if (Tx == 1)
+		if constexpr (Tx == 1)
 		{
 			adj[0][0] = 1;
 			return adj;
 		}
 
 		// temp is used to store cofactors of A[][]
-		int sign = 1;
+		i32 sign = 1;
 		std::array<std::array<T, Tx>, Ty> temp;
 
-		for (int i = 0; i < Ty; i++)
+		for (i32 i = 0; i < Ty; i++)
 		{
-			for (int j = 0; j < Tx; j++) {
+			for (i32 j = 0; j < Tx; j++) {
 				// Get cofactor of A[i][j]
 				GetCofactor(this->_data, temp, i, j, Tx);
 
@@ -246,13 +234,14 @@ Matrix<T, Tx, Ty>::Matrix(bool identity) : Matrix(static_cast<T>(0))
 	if (!identity)
 		return;
 
-	if (Tx != Ty)
+	#if Tx != Ty
 	{
 		spdlog::error("Cannot create identity matrix for non-square matrix");
 		return;
 	}
+	#endif
 
-	for (unsigned i = 0; i < Tx; i++)
+	for (u32 i = 0; i < Tx; i++)
 	{
 		this->_data[i][i] = static_cast<T>(1);
 	}
@@ -261,9 +250,9 @@ Matrix<T, Tx, Ty>::Matrix(bool identity) : Matrix(static_cast<T>(0))
 template <typename T, unsigned Tx, unsigned Ty>
 Matrix<T, Tx, Ty>::Matrix(const std::array<T, Tx * Ty>& data) : _data()
 {
-	for (unsigned y = 0; y < Ty; y++)
+	for (u32 y = 0; y < Ty; y++)
 	{
-		for (unsigned x = 0; x < Tx; x++)
+		for (u32 x = 0; x < Tx; x++)
 		{
 			this->_data[y][x] = data[y * Tx + x];
 		}
@@ -276,9 +265,9 @@ Matrix<T, Tx, Ty>::Matrix(const std::array<std::array<T, Tx>, Ty>& rows) : _data
 template <typename T, unsigned Tx, unsigned Ty>
 Matrix<T, Tx, Ty>::Matrix(const T scalar)
 {
-	for (unsigned y = 0; y < Ty; y++)
+	for (u32 y = 0; y < Ty; y++)
 	{
-		for (unsigned x = 0; x < Tx; x++)
+		for (u32 x = 0; x < Tx; x++)
 		{
 			this->_data[y][x] = scalar;
 		}
@@ -288,9 +277,9 @@ Matrix<T, Tx, Ty>::Matrix(const T scalar)
 template <typename T, unsigned Tx, unsigned Ty>
 Matrix<T, Tx, Ty>::Matrix(const glm::mat<Tx, Ty, T>& glmMat)
 {
-	for (unsigned y = 0; y < Ty; y++)
+	for (u32 y = 0; y < Ty; y++)
 	{
-		for (unsigned x = 0; x < Tx; x++)
+		for (u32 x = 0; x < Tx; x++)
 		{
 			this->_data[y][x] = glmMat[y][x];
 		}
@@ -303,12 +292,12 @@ const std::array<std::array<T, Tx>, Ty>& Matrix<T, Tx, Ty>::GetData() const
 	return this->_data;
 }
 template <typename T, unsigned Tx, unsigned Ty>
-const std::array<T, Tx>& Matrix<T, Tx, Ty>::GetRow(unsigned row) const
+const std::array<T, Tx>& Matrix<T, Tx, Ty>::GetRow(u32 row) const
 {
 	return this->_data[row];
 }
 template <typename T, unsigned Tx, unsigned Ty>
-T Matrix<T, Tx, Ty>::GetValue(unsigned row, unsigned column) const
+T Matrix<T, Tx, Ty>::GetValue(u32 row, u32 column) const
 {
 	return this->_data[row][column];
 }
@@ -320,13 +309,13 @@ void Matrix<T, Tx, Ty>::SetData(const std::array<std::array<T, Tx>, Ty>& data)
 }
 
 template <typename T, unsigned Tx, unsigned Ty>
-void Matrix<T, Tx, Ty>::SetRow(unsigned row, const std::array<T, Tx>& data)
+void Matrix<T, Tx, Ty>::SetRow(u32 row, const std::array<T, Tx>& data)
 {
 	this->_data[row] = data;
 }
 
 template <typename T, unsigned Tx, unsigned Ty>
-void Matrix<T, Tx, Ty>::SetValue(unsigned row, unsigned column, T data)
+void Matrix<T, Tx, Ty>::SetValue(u32 row, u32 column, T data)
 {
 	this->_data[row][column] = data;
 }
@@ -347,11 +336,11 @@ Matrix<T, Tx, Ty> Matrix<T, Tx, Ty>::GetInverse() const
 	// Find Inverse using formula "inverse(A) =
 	// adj(A)/det(A)"
 	Matrix<T, Tx, Ty> inverse;
-	for (int i = 0; i < Ty; i++)
+	for (i32 i = 0; i < Ty; i++)
 	{
-		for (int j = 0; j < Tx; j++)
+		for (i32 j = 0; j < Tx; j++)
 		{
-			inverse.SetValue(i, j, adj[i][j] / float(det));
+			inverse.SetValue(i, j, adj[i][j] / f32(det));
 		}
 	}
 
@@ -369,10 +358,10 @@ template <typename T, unsigned Tx, unsigned Ty>
 inline std::ostream& operator <<(std::ostream& os, const oter::Matrix<T, Tx, Ty>& mat)
 {
 	std::ostringstream str;
-	for (unsigned y = 0; y < Ty; y++)
+	for (oter::u32 y = 0; y < Ty; y++)
 	{
 		os << "\n\t";
-		for (unsigned x = 0; x < Tx; x++)
+		for (oter::u32 x = 0; x < Tx; x++)
 		{
 			os << mat.GetValue(y, x) << " ";
 		}
