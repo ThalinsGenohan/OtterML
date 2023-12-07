@@ -8,6 +8,8 @@ project(
 
 set(CMAKE_MODULE_PATH ${OtterML_SOURCE_DIR}/cmake)
 
+set(glm_DIR ${OtterML_SOURCE_DIR}/lib/glm/cmake/glm)
+
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set(CMAKE_CXX_STANDARD 20)
@@ -16,8 +18,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
-find_package(glm REQUIRED CONFIG)
-find_package(spdlog REQUIRED CONFIG)
-find_package(yaml-cpp REQUIRED CONFIG)
+find_package(glm REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 add_subdirectory(src/OtterML)
