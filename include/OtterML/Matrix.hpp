@@ -1,10 +1,9 @@
 #ifndef OTER_MATRIX_HPP
 #define OTER_MATRIX_HPP
 
-#include <glm/matrix.hpp>
-#include <spdlog/spdlog.h>
-#include <spdlog/fmt/ostr.h>
-#include <spdlog/sinks/stdout_sinks.h>
+//#include <spdlog/spdlog.h>
+//#include <spdlog/fmt/ostr.h>
+//#include <spdlog/sinks/stdout_sinks.h>
 
 #include <OtterML/Common.hpp>
 
@@ -23,7 +22,6 @@ public:
 	explicit Matrix(const std::array<T, Tx * Ty>& data);
 	explicit Matrix(const std::array<std::array<T, Tx>, Ty>& rows);
 	explicit Matrix(T scalar);
-	explicit Matrix(const glm::mat<Tx, Ty, T>& glmMat);
 
 	[[nodiscard]] const std::array<std::array<T, Tx>, Ty>& GetData() const;
 	[[nodiscard]] const std::array<T, Tx>& GetRow(u32 row) const;
@@ -34,37 +32,6 @@ public:
 	void SetValue(u32 row, u32 column, T data);
 
 	[[nodiscard]] Matrix GetInverse() const;
-
-	/**
-	 * \brief Convert to a glm::mat.
-	 */
-	[[nodiscard]] explicit operator glm::mat<Tx, Ty, T>() const
-	{
-		glm::mat<Tx, Ty, T> mat;
-		for (u32 y = 0; y < Ty; y++)
-		{
-			for (u32 x = 0; x < Tx; x++)
-			{
-				mat[y][x] = this->_data[y][x];
-			}
-		}
-		return mat;
-	}
-
-	/**
-	 * \brief Convert to a glm::mat2.
-	 */
-	//[[nodiscard]] explicit operator glm::mat2() const;
-
-	/**
-	 * \brief Convert to a glm::mat3.
-	 */
-	//[[nodiscard]] explicit operator glm::mat3() const;
-
-	/**
-	 * \brief Convert to a glm::mat4.
-	 */
-	//[[nodiscard]] explicit operator glm::mat4() const;
 
 	[[nodiscard]] bool operator==(const Matrix& right) const;
 
@@ -275,18 +242,6 @@ Matrix<T, Tx, Ty>::Matrix(const T scalar)
 }
 
 template <typename T, unsigned Tx, unsigned Ty>
-Matrix<T, Tx, Ty>::Matrix(const glm::mat<Tx, Ty, T>& glmMat)
-{
-	for (u32 y = 0; y < Ty; y++)
-	{
-		for (u32 x = 0; x < Tx; x++)
-		{
-			this->_data[y][x] = glmMat[y][x];
-		}
-	}
-}
-
-template <typename T, unsigned Tx, unsigned Ty>
 const std::array<std::array<T, Tx>, Ty>& Matrix<T, Tx, Ty>::GetData() const
 {
 	return this->_data;
@@ -354,6 +309,7 @@ const Matrix<T, Tx, Ty> Matrix<T, Tx, Ty>::IdentityMatrix(true);
 
 }
 
+/*
 template <typename T, unsigned Tx, unsigned Ty>
 inline std::ostream& operator <<(std::ostream& os, const oter::Matrix<T, Tx, Ty>& mat)
 {
@@ -368,5 +324,6 @@ inline std::ostream& operator <<(std::ostream& os, const oter::Matrix<T, Tx, Ty>
 	}
 	return os;
 }
+*/
 
 #endif

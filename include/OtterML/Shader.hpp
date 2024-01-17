@@ -49,19 +49,6 @@ public:
 	void SetMatrix3(const char* name, const Matrix<f32, 3, 3>& matrix, bool useProgram = false) const;
 	void SetMatrix4(const char* name, const Matrix<f32, 4, 4>& matrix, bool useProgram = false) const;
 
-	// GLM
-	void SetVector2f(const char* name, const glm::vec2& value, bool useProgram = false) const;
-	void SetVector3f(const char* name, const glm::vec3& value, bool useProgram = false) const;
-	void SetVector4f(const char* name, const glm::vec4& value, bool useProgram = false) const;
-	void SetVector2i(const char* name, const glm::ivec2& value, bool useProgram = false) const;
-	void SetVector3i(const char* name, const glm::ivec3& value, bool useProgram = false) const;
-	void SetVector4i(const char* name, const glm::ivec4& value, bool useProgram = false) const;
-	void SetVector2u(const char* name, const glm::uvec2& value, bool useProgram = false) const;
-	void SetVector3u(const char* name, const glm::uvec3& value, bool useProgram = false) const;
-	void SetVector4u(const char* name, const glm::uvec4& value, bool useProgram = false) const;
-	void SetMatrix3(const char* name, glm::mat3& matrix, bool useProgram = false) const;
-	void SetMatrix4(const char* name, glm::mat4& matrix, bool useProgram = false) const;
-
 
 	u32 GetID() const;
 

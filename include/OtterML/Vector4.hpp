@@ -1,7 +1,7 @@
 #ifndef OTER_VECTOR4_HPP
 #define OTER_VECTOR4_HPP
 
-#include <glm/vec4.hpp>
+//#include <glm/vec4.hpp>
 
 namespace oter
 {
@@ -63,16 +63,6 @@ public:
 	 * @brief Copy constructor
 	 */
 	Vector4(const Vector4& other);
-
-	// External conversion constructors
-
-	template <typename U>
-	explicit Vector4(const glm::vec<4, U>& glmVec);
-
-	explicit operator Matrix<T, 1, 4>() const;
-
-	template <typename U>
-	explicit operator glm::vec<4, U>() const;
 
 	[[nodiscard]] constexpr bool operator==(const Vector4& right) const;
 };

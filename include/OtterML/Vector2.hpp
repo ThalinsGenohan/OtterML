@@ -1,7 +1,6 @@
 #ifndef OTER_VECTOR2_HPP
 #define OTER_VECTOR2_HPP
 
-#include <glm/vec2.hpp>
 #include <yaml-cpp/yaml.h>
 
 #include <OtterML/Common.hpp>
@@ -72,13 +71,6 @@ public:
 	explicit Vector2(Matrix<T, 2, 1> matrix);
 
 	/**
-	 * @brief Construct a Vector2 from a glm::vec<2, U>
-	 * @param glmVec glm::vec<2, U> to convert
-	 */
-	template <typename U>
-	explicit Vector2(const glm::vec<2, U>& glmVec);
-
-	/**
 	 * @brief Convert to a std::array<
 	 */
 	explicit operator std::array<T, 2>() const;
@@ -87,15 +79,6 @@ public:
 	 * @brief Convert to a 2x1 oter::Matrix
 	 */
 	explicit operator Matrix<T, 1, 2>() const;
-
-	/**
-	 * @brief Convert to a glm::vec<2, U>
-	 */
-	template <typename U>
-	explicit operator glm::vec<2, U>() const
-	{
-		return glm::vec<2, U>(static_cast<U>(this->X), static_cast<U>(this->Y));
-	}
 
 	[[nodiscard]] T operator[](size_t index) const
 	{

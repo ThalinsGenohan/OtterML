@@ -3,7 +3,7 @@
 
 #include <OtterML/Common.hpp>
 
-#include <glm/fwd.hpp>
+//#include <glm/fwd.hpp>
 
 namespace oter
 {
@@ -47,39 +47,6 @@ public:
 	 */
 	template <typename U>
 	explicit Vector3(const Vector3<U>& other);
-
-	/**
-	 * \brief Construct a Vector3 from a glm::vec3
-	 * \param glmVec glm::vec3 to convert
-	 */
-	explicit Vector3(const glm::vec3& glmVec);
-
-	/**
-	 * \brief Construct a Vector3 from a glm::ivec3
-	 * \param glmVec glm::ivec3 to convert
-	 */
-	explicit Vector3(const glm::ivec3& glmVec);
-
-	/**
-	 * \brief Construct a Vector3 from a glm::uvec3
-	 * \param glmVec glm::uvec3 to convert
-	 */
-	explicit Vector3(const glm::uvec3& glmVec);
-
-	/**
-	 * \brief Convert to a glm::vec3
-	 */
-	explicit operator glm::vec3() const;
-
-	/**
-	 * \brief Convert to a glm::uvec3
-	 */
-	explicit operator glm::uvec3() const;
-
-	/**
-	 * \brief Convert to a glm::ivec3
-	 */
-	explicit operator glm::ivec3() const;
 
 	/**
 	 * \brief Convert to a 3x1 oter::Matrix

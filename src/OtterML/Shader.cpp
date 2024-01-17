@@ -1,9 +1,8 @@
 #include <OtterML/Shader.hpp>
 
-#include <glad/gl.h>
-#include <glm/gtc/type_ptr.hpp>
-#include <spdlog/spdlog.h>
+#include <iostream>
 
+#include <glad/gl.h>
 #include <OtterML/Common.hpp>
 
 namespace oter
@@ -91,11 +90,6 @@ void Shader::SetVector2f(const char* name, const f32 x, const f32 y, const bool 
 	glUniform2f(glGetUniformLocation(this->_id, name), x, y);
 }
 
-void Shader::SetVector2f(const char* name, const glm::vec2& value, const bool useProgram) const
-{
-	this->SetVector2f(name, value.x, value.y, useProgram);
-}
-
 void Shader::SetVector2f(const char* name, const Vector2<f32>& value, const bool useProgram) const
 {
 	this->SetVector2f(name, value.X, value.Y, useProgram);
@@ -106,11 +100,6 @@ void Shader::SetVector3f(const char* name, const f32 x, const f32 y, const f32 z
 	if (useProgram)
 		this->Use();
 	glUniform3f(glGetUniformLocation(this->_id, name), x, y, z);
-}
-
-void Shader::SetVector3f(const char* name, const glm::vec3& value, const bool useProgram) const
-{
-	this->SetVector3f(name, value.x, value.y, value.z, useProgram);
 }
 
 void Shader::SetVector3f(const char* name, const Vector3<f32>& value, const bool useProgram) const
@@ -127,11 +116,6 @@ void Shader::SetVector4f(const char* name, const f32 x, const f32 y, const f32 z
 	glUniform4f(glGetUniformLocation(this->_id, name), x, y, z, w);
 }
 
-void Shader::SetVector4f(const char* name, const glm::vec4& value, const bool useProgram) const
-{
-	this->SetVector4f(name, value.x, value.y, value.z, value.w, useProgram);
-}
-
 void Shader::SetInt(const char* name, const i32 value, const bool useProgram) const
 {
 	if (useProgram)
@@ -146,11 +130,6 @@ void Shader::SetVector2i(const char* name, const i32 x, const i32 y, const bool 
 	glUniform2i(glGetUniformLocation(this->_id, name), x, y);
 }
 
-void Shader::SetVector2i(const char* name, const glm::ivec2& value, const bool useProgram) const
-{
-	this->SetVector2i(name, value.x, value.y, useProgram);
-}
-
 void Shader::SetVector2i(const char* name, const Vector2<i32>& value, const bool useProgram) const
 {
 	this->SetVector2i(name, value.X, value.Y, useProgram);
@@ -161,11 +140,6 @@ void Shader::SetVector3i(const char* name, const i32 x, const i32 y, const i32 z
 	if (useProgram)
 		this->Use();
 	glUniform3i(glGetUniformLocation(this->_id, name), x, y, z);
-}
-
-void Shader::SetVector3i(const char* name, const glm::ivec3& value, const bool useProgram) const
-{
-	this->SetVector3i(name, value.x, value.y, value.z, useProgram);
 }
 
 void Shader::SetVector3i(const char* name, const Vector3<i32>& value, const bool useProgram) const
@@ -179,11 +153,6 @@ void Shader::SetVector4i(const char* name, const i32 x, const i32 y, const i32 z
 	if (useProgram)
 		this->Use();
 	glUniform4i(glGetUniformLocation(this->_id, name), x, y, z, w);
-}
-
-void Shader::SetVector4i(const char* name, const glm::ivec4& value, const bool useProgram) const
-{
-	this->SetVector4i(name, value.x, value.y, value.z, value.w, useProgram);
 }
 
 void Shader::SetUInt(const char* name, const u32 value, const bool useProgram) const
@@ -200,11 +169,6 @@ void Shader::SetVector2u(const char* name, const u32 x, const u32 y, const bool 
 	glUniform2ui(glGetUniformLocation(this->_id, name), x, y);
 }
 
-void Shader::SetVector2u(const char* name, const glm::uvec2& value, const bool useProgram) const
-{
-	this->SetVector2u(name, value.x, value.y, useProgram);
-}
-
 void Shader::SetVector2u(const char* name, const Vector2<u32>& value, const bool useProgram) const
 {
 	this->SetVector2u(name, value.X, value.Y, useProgram);
@@ -215,11 +179,6 @@ void Shader::SetVector3u(const char* name, const u32 x, const u32 y, const u32 z
 	if (useProgram)
 		this->Use();
 	glUniform3ui(glGetUniformLocation(this->_id, name), x, y, z);
-}
-
-void Shader::SetVector3u(const char* name, const glm::uvec3& value, const bool useProgram) const
-{
-	this->SetVector3u(name, value.x, value.y, value.z, useProgram);
 }
 
 void Shader::SetVector3u(const char* name, const Vector3<u32>& value, const bool useProgram) const
@@ -233,31 +192,6 @@ void Shader::SetVector4u(const char* name, const u32 x, const u32 y, const u32 z
 	if (useProgram)
 		this->Use();
 	glUniform4ui(glGetUniformLocation(this->_id, name), x, y, z, w);
-}
-
-void Shader::SetVector4u(const char* name, const glm::uvec4& value, const bool useProgram) const
-{
-	this->SetVector4u(name, value.x, value.y, value.z, value.w, useProgram);
-}
-
-void Shader::SetMatrix3(const char* name, glm::mat3& matrix, const bool useProgram) const
-{
-	if (useProgram)
-		this->Use();
-	glUniformMatrix3fv(glGetUniformLocation(this->_id, name), 1, true, value_ptr(matrix));
-}
-
-void Shader::SetMatrix3(const char* name, const Matrix<f32, 3, 3>& matrix, const bool useProgram) const
-{
-	glm::mat3 m = static_cast<glm::mat3>(matrix);
-	this->SetMatrix3(name, m, useProgram);
-}
-
-void Shader::SetMatrix4(const char* name, glm::mat4& matrix, const bool useProgram) const
-{
-	if (useProgram)
-		this->Use();
-	glUniformMatrix4fv(glGetUniformLocation(this->_id, name), 1, false, value_ptr(matrix));
 }
 
 Shader::operator u32() const
@@ -275,7 +209,7 @@ void Shader::CheckCompileErrors(const u32 object, const char* type)
 		if (!success)
 		{
 			glGetShaderInfoLog(object, 1024, nullptr, infoLog);
-			spdlog::error("Shader compile-time error: Type: {}\n{}", type, infoLog);
+			std::cerr << "Shader compile-time error: Type: " << type << "\n" << infoLog;
 		}
 	} else
 	{
@@ -283,7 +217,7 @@ void Shader::CheckCompileErrors(const u32 object, const char* type)
 		if (!success)
 		{
 			glGetProgramInfoLog(object, 1024, nullptr, infoLog);
-			spdlog::error("Shader link-time error: Type: {}\n{}", type, infoLog);
+			std::cerr << "Shader link-time error: Type: " << type << "\n" << infoLog;
 		}
 	}
 }

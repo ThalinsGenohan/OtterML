@@ -33,12 +33,6 @@ Vector2<T>::Vector2(T array[2]) : X(array[0]), Y(array[1]) {}
 template <typename T>
 Vector2<T>::Vector2(std::array<T, 2> array) : X(array[0]), Y(array[1]) {}
 
-
-
-template<typename T>
-template<typename U>
-Vector2<T>::Vector2(const glm::vec<2, U>& glmVec) : X(static_cast<T>(glmVec.x)), Y(static_cast<T>(glmVec.y)) {}
-
 template <typename T>
 T Vector2<T>::Dot(const Vector2<T>& right)
 {
