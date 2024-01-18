@@ -36,7 +36,7 @@ target_include_directories(otterml PUBLIC "${OtterML_SOURCE_DIR}/include")
 
 target_compile_features(otterml PUBLIC cxx_std_20)
 
-target_precompile_headers(otterml PRIVATE "${OtterML_SOURCE_DIR}/src/OtterML/PCH.hpp")
+target_precompile_headers(otterml PUBLIC "${OtterML_SOURCE_DIR}/src/OtterML/PCH.hpp")
 
 source_group(
 	TREE "${PROJECT_SOURCE_DIR}/include"
