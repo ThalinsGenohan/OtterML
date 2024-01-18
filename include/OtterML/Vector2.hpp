@@ -1,6 +1,8 @@
 #ifndef OTER_VECTOR2_HPP
 #define OTER_VECTOR2_HPP
 
+#include <stdexcept>
+
 #include <OtterML/Common.hpp>
 
 namespace oter
