@@ -16,8 +16,4 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
-#find_package(glm REQUIRED)
-#find_package(spdlog REQUIRED)
-find_package(yaml-cpp REQUIRED)
-
 add_subdirectory(src/OtterML)

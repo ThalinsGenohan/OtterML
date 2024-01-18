@@ -33,9 +33,6 @@ add_library(otterml ${SOURCE_LIST} ${HEADER_LIST})
 add_library(OtterML::OtterML ALIAS otterml)
 
 target_include_directories(otterml PUBLIC "${OtterML_SOURCE_DIR}/include")
-include_directories(SYSTEM ${GLM_INCLUDE_DIR} ${SPDLOG_INCLUDE_DIR} ${YAML_CPP_INCLUDE_DIR})
-
-target_link_libraries(otterml PRIVATE glm ${SPDLOG_LIBRARY} ${YAML_CPP_LIBRARY})
 
 target_compile_features(otterml PUBLIC cxx_std_20)
 

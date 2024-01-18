@@ -1,8 +1,6 @@
 #ifndef OTER_VECTOR2_HPP
 #define OTER_VECTOR2_HPP
 
-#include <yaml-cpp/yaml.h>
-
 #include <OtterML/Common.hpp>
 
 namespace oter
@@ -183,48 +181,5 @@ public:
 	static const Vector2 UnitY;
 };
 }
-
-template <typename T>
-struct YAML::convert<oter::Vector2<T>>
-{
-public:
-	static Node encode(const oter::Vector2<T>& right)
-	{
-		Node node;
-		node["x"] = right.X;
-		node["y"] = right.Y;
-		return node;
-	}
-
-	static bool decode(const Node& node, oter::Vector2<T>& right)
-	{
-		if (node.IsSequence())
-			return decode_sequence(node, right);
-		if (node.IsMap())
-			return decode_map(node, right);
-
-		return false;
-	}
-
-private:
-	static bool decode_sequence(const Node& node, oter::Vector2<T>& right)
-	{
-		if (!node.IsSequence() || node.size() != 2)
-			return false;
-
-		right.X = node[0].as<T>();
-		right.Y = node[1].as<T>();
-		return true;
-	}
-	static bool decode_map(const Node& node, oter::Vector2<T>& right)
-	{
-		if (!node.IsMap() || node.size() != 2)
-			return false;
-
-		right.X = node["x"].as<T>();
-		right.Y = node["y"].as<T>();
-		return true;
-	}
-};
 
 #endif
