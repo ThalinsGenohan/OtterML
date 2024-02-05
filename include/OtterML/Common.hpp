@@ -1,6 +1,8 @@
 #ifndef OTER_COMMON_HPP
 #define OTER_COMMON_HPP
 
+#include <cstdint>
+
 namespace oter
 {
 

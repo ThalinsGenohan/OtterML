@@ -1,6 +1,9 @@
 #ifndef OTER_FIXEDPOINT_H
 #define OTER_FIXEDPOINT_H
 
+#include <compare>
+#include <type_traits>
+
 #include <OtterML/Common.hpp>
 
 namespace oter

@@ -1,5 +1,7 @@
 #include <OtterML/Angle.hpp>
 
+#include <cmath>
+
 namespace oter
 {
 

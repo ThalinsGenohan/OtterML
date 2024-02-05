@@ -3,6 +3,9 @@
 
 #include <OtterML/Common.hpp>
 
+#include <unordered_map>
+#include <vector>
+
 namespace oter
 {
 class Shader;

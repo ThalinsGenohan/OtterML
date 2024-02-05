@@ -15,7 +15,7 @@ Color::operator Vector3<f32>() const
 	);
 }
 
-Color::operator oter::Vector4<oter::f32>() const
+Color::operator Vector4<f32>() const
 {
 	return Vector4<f32>(
 		static_cast<f32>(this->Red) / UINT8_MAX,

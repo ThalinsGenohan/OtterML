@@ -194,6 +194,27 @@ void Shader::SetVector4u(const char* name, const u32 x, const u32 y, const u32 z
 	glUniform4ui(glGetUniformLocation(this->_id, name), x, y, z, w);
 }
 
+void Shader::SetMatrix2(const char* name, const Matrix<f32, 2, 2>& matrix, bool useProgram) const
+{
+	if (useProgram)
+		this->Use();
+	glUniformMatrix2fv(glGetUniformLocation(this->_id, name), 1, true, matrix.GetData().data());
+}
+
+void Shader::SetMatrix3(const char* name, const Matrix<f32, 3, 3>& matrix, bool useProgram) const
+{
+	if (useProgram)
+		this->Use();
+	glUniformMatrix3fv(glGetUniformLocation(this->_id, name), 1, true, matrix.GetData().data());
+}
+
+void Shader::SetMatrix4(const char* name, const Matrix<f32, 4, 4>& matrix, bool useProgram) const
+{
+	if (useProgram)
+		this->Use();
+	glUniformMatrix4fv(glGetUniformLocation(this->_id, name), 1, true, matrix.GetData().data());
+}
+
 Shader::operator u32() const
 {
 	return this->_id;

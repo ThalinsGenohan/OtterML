@@ -1,6 +1,9 @@
 #ifndef OTER_TEXTURE2D_H
 #define OTER_TEXTURE2D_H
 
+#include <unordered_map>
+#include <vector>
+
 #include <OtterML/Vector2.hpp>
 
 namespace oter

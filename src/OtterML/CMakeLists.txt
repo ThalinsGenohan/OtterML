@@ -12,6 +12,9 @@ set(HEADER_LIST
 	"${HEADER_DIR}/Vector2.hpp"
 	"${HEADER_DIR}/Vector3.hpp"
 	"${HEADER_DIR}/Vector4.hpp"
+
+	"${OtterML_SOURCE_DIR}/include/glad/gl.h"
+	"${OtterML_SOURCE_DIR}/include/KHR/khrplatform.h"
 )
 
 set(SOURCE_DIR "${OtterML_SOURCE_DIR}/src/OtterML")
@@ -27,6 +30,8 @@ set(SOURCE_LIST
 	"${SOURCE_DIR}/Vector2.cpp"
 	"${SOURCE_DIR}/Vector3.cpp"
 	"${SOURCE_DIR}/Vector4.cpp"
+
+	"${OtterML_SOURCE_DIR}/src/glad/gl.c"
 )
 
 add_library(otterml ${SOURCE_LIST} ${HEADER_LIST})
@@ -36,10 +41,16 @@ target_include_directories(otterml PUBLIC "${OtterML_SOURCE_DIR}/include")
 
 target_compile_features(otterml PUBLIC cxx_std_20)
 
-target_precompile_headers(otterml PUBLIC "${OtterML_SOURCE_DIR}/src/OtterML/PCH.hpp")
+#target_precompile_headers(otterml PUBLIC "${OtterML_SOURCE_DIR}/src/OtterML/PCH.hpp")
 
 source_group(
 	TREE "${PROJECT_SOURCE_DIR}/include"
 	PREFIX "Header Files"
 	FILES ${HEADER_LIST}
+)
+
+source_group(
+	TREE "${PROJECT_SOURCE_DIR}/src"
+	PREFIX "Source Files"
+	FILES ${SOURCE_LIST}
 )

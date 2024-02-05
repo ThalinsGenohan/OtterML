@@ -1,6 +1,7 @@
 #include <OtterML/Transform2D.hpp>
 
 #define _USE_MATH_DEFINES
+#include <cmath>
 
 namespace oter
 {
